@@ -15,3 +15,19 @@ where (bytes_spilled_to_local_storage > 1024 * 1024 or
 and  elapsed_seconds > 120
 and    bytes_scanned > 1024 * 1024
 order by elapsed_seconds desc;
+
+
+-- This query retrieves the load history of your warehouse for the past hour:
+
+-- use warehouse mywarehouse;
+
+      select *
+      from
+      table(information_schema.warehouse_load_history(date_range_start=>dateadd
+      ('hour',-1,current_timestamp())));
+      
+-- Three parameters help diagnose slow queries:
+
+-- AVG_RUNNING — the average number of queries executing
+-- AVG_QUEUED_LOAD — the average number of queries queued because the warehouse is overloaded
+-- AVG_QUEUED_PROVISIONING — the average number of queries queued because Snowflake is provisioning the warehouse
